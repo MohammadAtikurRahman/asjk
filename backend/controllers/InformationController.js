@@ -110,7 +110,36 @@ async function getInformation(req, res) {
 
 
 
+    // const natural = require('natural');
 
+    // function findBestMatch(message, dataArray) {
+    //   const tfidf = new natural.TfIdf();
+    //   dataArray.forEach(d => tfidf.addDocument(d.name));
+    
+    //   const tokens = natural.WordTokenizer().tokenize(message);
+    //   const vector = tfidf.getDocumentVector(tokens);
+    //   let bestMatch = { index: -1, similarity: -Infinity };
+    
+    //   dataArray.forEach((d, i) => {
+    //     const docVector = tfidf.getDocumentVector(natural.WordTokenizer().tokenize(d.name));
+    //     const similarity = natural.JaroWinklerDistance(vector, docVector);
+    //     if (similarity > bestMatch.similarity) {
+    //       bestMatch = { index: i, similarity: similarity };
+    //     }
+    //   });
+    
+    //   if (bestMatch.similarity > 0.3) {
+    //     return dataArray[bestMatch.index];
+    //   } else {
+    //     console.log('No match found');
+    //     return null;
+    //   }
+    // }
+    
+    // const matchedItem = findBestMatch(message, dataArray);
+    // console.log("matched item:", matchedItem);
+    // const itemName = matchedItem ? matchedItem.name : null;
+    
 
 
 
