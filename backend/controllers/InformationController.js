@@ -20,15 +20,13 @@ async function getInformation(req, res) {
   const message = req.body.message;
   const properties = [
     { name: "name", property: "name" },
-    { name: "sku", property: "sku" },
-    { name: "price", property: "price" },
-    { name: "brand", property: "brand" },
-    { name: "quantity", property: "quantity" },
-    { name: "width", property: "width" },
-    { name: "height", property: "height" },
-    { name: "length", property: "length" },
-    { name: "weight", property: "weight" },
-    { name: "description", property: "description" },
+    { name: "azizsupermrkt", property: "azizsupermrkt" },
+    { name: "chittagong", property: "chittagong" },
+    { name: "dhaka", property: "dhaka" },
+    { name: "sylhet", property: "sylhet" },
+    { name: "banglabazar", property: "banglabazar" },
+    { name: "ecommerce", property: "ecommerce" },
+
   ];
 
   for (const prop of properties) {
@@ -63,6 +61,7 @@ async function getInformation(req, res) {
     }
 
     const itemName = dataArray.find((d) => message.includes(d.name));
+    console.log(itemName)
 
     if (!itemName) {
       try {
