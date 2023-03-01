@@ -150,7 +150,7 @@ async function getInformation(req, res) {
       return prev + ` ${Object.keys(curr)[0]}: ${curr[Object.keys(curr)[0]]} `;
     }, "");
 
-    return res.json({ botResponse: `\n\n` + response });
+    return res.json({ botResponse: `\n\n`+ " do you mean "+ itemName.name+" Available in" + response });
   }
 }
 
