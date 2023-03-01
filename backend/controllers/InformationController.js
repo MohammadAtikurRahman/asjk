@@ -30,25 +30,37 @@ async function getInformation(req, res) {
   ];
 
   for (const prop of properties) {
+   
+   
+   
     const matchingData1 = dataArray.find(
       (d) => message.includes(d.name) && message.includes("dimension")
     );
     const matchingData2 = dataArray.find((d) => d.name === message);
     const matchingData3 = dataArray.find((d) => d.sku === message);
 
+
+
+
+
     if (matchingData2) {
       res.json({
-        botResponse: `\n\n${matchingData2.name} of : ${matchingData2.description}
-          }`,
+        botResponse: `\n\n${matchingData2.name} is available in dhaka : ${matchingData2.dhaka} azizsuper market : ${matchingData2.azizsupermrkt}  chittagong: ${matchingData2.chittagong} sylhet  : ${matchingData2.sylhet}  banglabazar  : ${matchingData2.banglabazar}   ecommerce  : ${matchingData2.ecommerce} `,
       });
       return;
-    } else if (matchingData3) {
+    } 
+    
+    
+    else if (matchingData3) {
       res.json({
         botResponse: `\n\n${matchingData3.name} of : ${matchingData3.description}
           }`,
       });
       return;
-    } else if (matchingData1) {
+    } 
+    
+    
+    else if (matchingData1) {
       const dimensions = {
         width: matchingData1.width,
         height: matchingData1.height,
@@ -89,8 +101,10 @@ async function getInformation(req, res) {
       }
     }
 
-    const queries = properties.filter((p) => message.includes(p.name));
+    const queries = properties.filter((p) => message.includes(p.name)  || message.includes("stock") || message.includes("available") );
 
+
+    console.log(queries);
     const result = queries
       .map((q) => {
         const data = dataArray.find((d) => d.name === itemName.name);
