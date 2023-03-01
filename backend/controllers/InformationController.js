@@ -1,7 +1,7 @@
 const fs = require("fs");
 const csv = require("csv-parser");
 const axios = require("axios");
-const Fuse = require('fuse.js');
+const stringSimilarity = require('string-similarity');
 
 let dataArray = [];
 fs.createReadStream("idiya.csv")
@@ -23,7 +23,7 @@ const processData = (data) => {
 
 
 async function getInformation(req, res) {
-  const message = req.body.message;
+  let message = req.body.message;
   const properties = [
     { name: "name", property: "name" },
     { name: "azizsupermrkt", property: "azizsupermrkt" },
@@ -78,8 +78,25 @@ async function getInformation(req, res) {
       return;
     }
 
-    const itemName = dataArray.find((d) => message.includes(d.name));
-    console.log(itemName)
+   
+   
+    const matches = stringSimilarity.findBestMatch(message, dataArray.map(d => d.name));
+    let matchedItems = []; 
+    if (matches.bestMatch.rating > 0.3) {
+      const matchedItem = dataArray[matches.bestMatchIndex];
+      matchedItems.push(matchedItem);
+    } else {
+      console.log('No match found');
+    }
+    console.log("matched item:", matchedItems[0]);    
+   
+   
+   
+   
+   
+    const itemName = matchedItems[0];
+    
+    console.log("ok version",itemName)
 
 
 
@@ -114,7 +131,7 @@ async function getInformation(req, res) {
     const queries = properties.filter((p) => message.includes(p.name)  || message.includes("stock") || message.includes("available") );
 
 
-    console.log(queries);
+    console.log("matching queries",queries);
     const result = queries
       .map((q) => {
         const data = dataArray.find((d) => d.name === itemName.name);

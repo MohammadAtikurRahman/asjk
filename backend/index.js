@@ -11,6 +11,44 @@ const {getInformation} = require("./controllers/InformationController")
 
 app.post("/api/",getInformation);
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 const port = process.env.PORT || 5000;
 app.listen(port, () => {
   console.log(`Backend server running on port ${port}`);
