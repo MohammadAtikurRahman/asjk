@@ -1,6 +1,7 @@
 const fs = require("fs");
 const csv = require("csv-parser");
 const axios = require("axios");
+const Fuse = require('fuse.js');
 
 let dataArray = [];
 fs.createReadStream("idiya.csv")
@@ -15,6 +16,11 @@ fs.createReadStream("idiya.csv")
 const processData = (data) => {
   // console.log(data);
 };
+
+
+
+
+
 
 async function getInformation(req, res) {
   const message = req.body.message;
@@ -74,6 +80,10 @@ async function getInformation(req, res) {
 
     const itemName = dataArray.find((d) => message.includes(d.name));
     console.log(itemName)
+
+
+
+
 
     if (!itemName) {
       try {
