@@ -79,6 +79,48 @@ async function getInformation(req, res) {
     }
 
    
+
+
+
+    // const { cosineSimilarity } = require('cosine-similarity');
+
+    // function findBestMatch(message, dataArray) {
+    //   let bestMatch = { index: -1, similarity: -Infinity };
+    
+    //   for (let i = 0; i < dataArray.length; i++) {
+    //     const similarity = cosineSimilarity(message, dataArray[i].name);
+    //     if (similarity > bestMatch.similarity) {
+    //       bestMatch = { index: i, similarity: similarity };
+    //     }
+    //   }
+    
+    //   if (bestMatch.similarity > 0.3) {
+    //     return dataArray[bestMatch.index];
+    //   } else {
+    //     console.log('No match found');
+    //     return null;
+    //   }
+    // }
+    
+    // const matchedItem = findBestMatch(message, dataArray);
+    // console.log("matched item:", matchedItem);
+    // const itemName = matchedItem ? matchedItem.name : null;
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
    
     const matches = stringSimilarity.findBestMatch(message, dataArray.map(d => d.name));
     let matchedItems = []; 
