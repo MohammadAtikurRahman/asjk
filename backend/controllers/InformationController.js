@@ -26,12 +26,12 @@ async function getInformation(req, res) {
   let message = req.body.message;
   const properties = [
     { name: "name", property: "name" },
-    { name: "azizsupermrkt", property: "azizsupermrkt" },
-    { name: "chittagong", property: "chittagong" },
-    { name: "dhaka", property: "dhaka" },
-    { name: "sylhet", property: "sylhet" },
-    { name: "banglabazar", property: "banglabazar" },
-    { name: "ecommerce", property: "ecommerce" },
+    { name: "aziz", property: "aziz" },
+    { name: "ctg", property: "ctg" },
+    { name: "dhk", property: "dhk" },
+    { name: "syl", property: "syl" },
+    { name: "bb", property: "bb" },
+    { name: "ecom", property: "ecom" },
     { name: "price", property: "price" },
 
 
@@ -45,15 +45,33 @@ async function getInformation(req, res) {
       (d) => message.includes(d.name) && message.includes("dimension")
     );
     const matchingData2 = dataArray.find((d) => d.name === message || message.includes("stock") || message.includes("available"));
+
+    console.log("matching data",matchingData2)
+
+
+
+    
+
+
     const matchingData3 = dataArray.find((d) => d.sku === message);
 
 
 
 
 
+
     if (matchingData2) {
+
+
+
+
+
+
+
+
+
       res.json({
-        botResponse: `\n\n${matchingData2.name} is available in Dhaka : ${matchingData2.dhaka} Aziz Super Market  : ${matchingData2.azizsupermrkt}  Chittagong : ${matchingData2.chittagong} Sylhet  : ${matchingData2.sylhet}  Bangla Bazar  : ${matchingData2.banglabazar}   Ecommerce  : ${matchingData2.ecommerce} `,
+        botResponse: `\n\n${matchingData2.name} is available in Dhaka : ${matchingData2.dhk} Aziz Super Market  : ${matchingData2.aziz}  Chittagong : ${matchingData2.ctg} Sylhet  : ${matchingData2.syl}  Bangla Bazar  : ${matchingData2.banglabazar}   Ecommerce  : ${matchingData2.ecomm} `,
       });
       return;
     } 
@@ -84,76 +102,7 @@ async function getInformation(req, res) {
 
 
 
-    // const { cosineSimilarity } = require('cosine-similarity');
-
-    // function findBestMatch(message, dataArray) {
-    //   let bestMatch = { index: -1, similarity: -Infinity };
-    
-    //   for (let i = 0; i < dataArray.length; i++) {
-    //     const similarity = cosineSimilarity(message, dataArray[i].name);
-    //     if (similarity > bestMatch.similarity) {
-    //       bestMatch = { index: i, similarity: similarity };
-    //     }
-    //   }
-    
-    //   if (bestMatch.similarity > 0.3) {
-    //     return dataArray[bestMatch.index];
-    //   } else {
-    //     console.log('No match found');
-    //     return null;
-    //   }
-    // }
-    
-    // const matchedItem = findBestMatch(message, dataArray);
-    // console.log("matched item:", matchedItem);
-    // const itemName = matchedItem ? matchedItem.name : null;
-    
-
-
-
-
-    // const natural = require('natural');
-
-    // function findBestMatch(message, dataArray) {
-    //   const tfidf = new natural.TfIdf();
-    //   dataArray.forEach(d => tfidf.addDocument(d.name));
-    
-    //   const tokens = natural.WordTokenizer().tokenize(message);
-    //   const vector = tfidf.getDocumentVector(tokens);
-    //   let bestMatch = { index: -1, similarity: -Infinity };
-    
-    //   dataArray.forEach((d, i) => {
-    //     const docVector = tfidf.getDocumentVector(natural.WordTokenizer().tokenize(d.name));
-    //     const similarity = natural.JaroWinklerDistance(vector, docVector);
-    //     if (similarity > bestMatch.similarity) {
-    //       bestMatch = { index: i, similarity: similarity };
-    //     }
-    //   });
-    
-    //   if (bestMatch.similarity > 0.3) {
-    //     return dataArray[bestMatch.index];
-    //   } else {
-    //     console.log('No match found');
-    //     return null;
-    //   }
-    // }
-    
-    // const matchedItem = findBestMatch(message, dataArray);
-    // console.log("matched item:", matchedItem);
-    // const itemName = matchedItem ? matchedItem.name : null;
-    
-
-
-
-
-
-
-
-
-
-
-   
-    const matches = stringSimilarity.findBestMatch(message, dataArray.map(d => d.name) || message.includes("stock") );
+    const matches = stringSimilarity.findBestMatch(message, dataArray.map(d => d.name)  );
     let matchedItems = []; 
     if (matches.bestMatch.rating > 0.3) {
       const matchedItem = dataArray[matches.bestMatchIndex];
@@ -162,13 +111,7 @@ async function getInformation(req, res) {
       console.log('No match found');
     }
     console.log("matched item:", matchedItems[0]);    
-   
-   
-   
-   
-   
-    const itemName = matchedItems[0];
-    
+    const itemName = matchedItems[0];    
     console.log("ok version",itemName)
 
 
@@ -201,10 +144,55 @@ async function getInformation(req, res) {
       }
     }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+
+
+
+ 
+
+
+
     const queries = properties.filter((p) => message.includes(p.name) );
 
 
     console.log("matching queries",queries);
+
+
+
+
+
+
+
+
+
     const result = queries
       .map((q) => {
         const data = dataArray.find((d) => d.name === itemName.name);
