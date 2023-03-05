@@ -51,7 +51,7 @@ async function getInformation(req, res) {
 
     if (matchingData2) {
       res.json({
-        botResponse: `\n\n${matchingData2.name} is available in dhaka : ${matchingData2.dhaka} azizsuper market : ${matchingData2.azizsupermrkt}  chittagong: ${matchingData2.chittagong} sylhet  : ${matchingData2.sylhet}  banglabazar  : ${matchingData2.banglabazar}   ecommerce  : ${matchingData2.ecommerce} `,
+        botResponse: `\n\n${matchingData2.name} is available in Dhaka : ${matchingData2.dhaka} Aziz Super Market  : ${matchingData2.azizsupermrkt}  Chittagong : ${matchingData2.chittagong} Sylhet  : ${matchingData2.sylhet}  Bangla Bazar  : ${matchingData2.banglabazar}   Ecommerce  : ${matchingData2.ecommerce} `,
       });
       return;
     } 
