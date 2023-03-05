@@ -32,6 +32,8 @@ async function getInformation(req, res) {
     { name: "sylhet", property: "sylhet" },
     { name: "banglabazar", property: "banglabazar" },
     { name: "ecommerce", property: "ecommerce" },
+    { name: "price", property: "price" },
+
 
   ];
 
@@ -42,7 +44,7 @@ async function getInformation(req, res) {
     const matchingData1 = dataArray.find(
       (d) => message.includes(d.name) && message.includes("dimension")
     );
-    const matchingData2 = dataArray.find((d) => d.name === message);
+    const matchingData2 = dataArray.find((d) => d.name === message || message.includes("stock") || message.includes("available"));
     const matchingData3 = dataArray.find((d) => d.sku === message);
 
 
@@ -151,7 +153,7 @@ async function getInformation(req, res) {
 
 
    
-    const matches = stringSimilarity.findBestMatch(message, dataArray.map(d => d.name));
+    const matches = stringSimilarity.findBestMatch(message, dataArray.map(d => d.name) || message.includes("stock") );
     let matchedItems = []; 
     if (matches.bestMatch.rating > 0.3) {
       const matchedItem = dataArray[matches.bestMatchIndex];
@@ -199,7 +201,7 @@ async function getInformation(req, res) {
       }
     }
 
-    const queries = properties.filter((p) => message.includes(p.name)  || message.includes("stock") || message.includes("available") );
+    const queries = properties.filter((p) => message.includes(p.name) );
 
 
     console.log("matching queries",queries);
@@ -221,7 +223,7 @@ async function getInformation(req, res) {
       return prev + ` ${Object.keys(curr)[0]}: ${curr[Object.keys(curr)[0]]} `;
     }, "");
 
-    return res.json({ botResponse: `\n\n`+ " do you mean "+ itemName.name+" Available in" + response });
+    return res.json({ botResponse: `\n\n`+ "  "+ itemName.name+" " + response });
   }
 }
 
