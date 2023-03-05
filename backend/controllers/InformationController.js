@@ -40,13 +40,22 @@ async function getInformation(req, res) {
   for (const prop of properties) {
    
    
-   
-    const matchingData1 = dataArray.find(
-      (d) => message.includes(d.name) && message.includes("dimension")
-    );
-    const matchingData2 = dataArray.find((d) => d.name === message || message.includes("stock") || message.includes("available"));
 
-    console.log("matching data",matchingData2)
+    const matches2 = stringSimilarity.findBestMatch(message, dataArray.map(d => d.name)  );
+    let matchedItems2 = []; 
+    if (matches2.bestMatch.rating > 0.3) {
+      const matchedItem2 = dataArray[matches2.bestMatchIndex];
+      matchedItems2.push(matchedItem2);
+    } else {
+      console.log('No match found');
+    }
+    console.log("matched item:", matchedItems2[0]);    
+    const matchingData2 = matchedItems2[0];    
+    console.log("ok version 2",matchingData2)
+
+    // const matchingData2 = dataArray.find((d) => d.name === message || message.includes("stock") || message.includes("available"));
+
+    console.log("matching data 2",matchingData2)
 
 
 
@@ -56,24 +65,20 @@ async function getInformation(req, res) {
     const matchingData3 = dataArray.find((d) => d.sku === message);
 
 
+    const queries2 = properties.filter((p) => message.includes(p.name) );
 
+
+    console.log("matching queries 2",queries2);
 
 
 
     if (matchingData2) {
-
-
-
-
-
-
-
-
-
+             if(queries2.length === 0){
       res.json({
-        botResponse: `\n\n${matchingData2.name} is available in Dhaka : ${matchingData2.dhk} Aziz Super Market  : ${matchingData2.aziz}  Chittagong : ${matchingData2.ctg} Sylhet  : ${matchingData2.syl}  Bangla Bazar  : ${matchingData2.banglabazar}   Ecommerce  : ${matchingData2.ecomm} `,
+        botResponse: `\n\n${matchingData2.name} is available in Dhaka : ${matchingData2.dhk} Aziz Super Market  : ${matchingData2.aziz}  Chittagong : ${matchingData2.ctg} Sylhet  : ${matchingData2.syl}  Bangla Bazar  : ${matchingData2.bb}   Ecommerce  : ${matchingData2.ecom} `,
       });
       return;
+       }
     } 
     
     
@@ -85,18 +90,6 @@ async function getInformation(req, res) {
       return;
     } 
     
-    
-    else if (matchingData1) {
-      const dimensions = {
-        width: matchingData1.width,
-        height: matchingData1.height,
-        length: matchingData1.length,
-      };
-      res.status(200).json({
-        botResponse: `\n\nWidth: ${dimensions.width}, Height: ${dimensions.height}, Length: ${dimensions.length}`,
-      });
-      return;
-    }
 
    
 
