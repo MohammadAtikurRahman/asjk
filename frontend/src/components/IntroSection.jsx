@@ -2,17 +2,26 @@ import React from "react";
 const IntroSection = () => {
   return (
     <div id="introsection">
-      <h1>Introducing Custom ChatGPT</h1>
+      <h1>বাতিঘর চ্যাট জিপিটিতে স্বাগতম</h1>
       <p>
-        Features:
+        এখানে জানতে পারবেন:
         <ul>
-          <li>Instantaneous responses to all queries</li>
-          <li>Trained to decline inappropriate requests </li>
-          <li>Continuously Learning</li>
-          <li>Improved efficiency and accuracy in NLP-related tasks</li>
-          <li>pleasant user interface</li>
+          <li>বাতিঘরের সকল বইয়ের স্টক</li>
+          <li>বইয়ের হালনাগাদ দাম </li>
         </ul>
       </p>
+      <p>আগামীতে আইএসবিএন নাম্বার সার্চ সহ আরো অনেক তথ্য এখানে সংযুক্ত হবে।</p>
+      <p>উদাহরন</p>
+      <br />
+      <p>বইয়ের দাম জানতে সার্চ করুন:</p>
+      <p>Price [বইয়ের নাম] ➔ </p>
+      <p>অথবা,</p>
+      <p> [বইয়ের নাম] Price ➔</p>
+      <br />
+      <p>বইয়ের স্টক জানতে সার্চ করুন:</p>
+      <p>সব লোকেশনের স্টক দেখতে: [বইয়ের নাম] ➔</p>
+      <p>নির্দিষ্ট লোকেশনের স্টক দেখতে: [বইয়ের নাম] Dhaka ➔</p>
+      <p>নির্দিষ্ট লোকেশনের স্টক দেখতে: [বইয়ের নাম] Chittagong ➔</p>
     </div>
   );
 };
