@@ -23,110 +23,20 @@ const processData = (data) => {
 
 
 async function getInformation(req, res) {
-  // function levenshteinDistance(s1, s2) {
-  //   // Create a 2D array to store the Levenshtein distances
-  //   const distances = [];
-  
-  //   // Initialize the first row and column with incremental values
-  //   for (let i = 0; i <= s1.length; i++) {
-  //     distances[i] = [i];
-  //   }
-  //   for (let j = 0; j <= s2.length; j++) {
-  //     distances[0][j] = j;
-  //   }
-  
-  //   // Compute the Levenshtein distances
-  //   for (let i = 1; i <= s1.length; i++) {
-  //     for (let j = 1; j <= s2.length; j++) {
-  //       const cost = s1[i - 1] === s2[j - 1] ? 0 : 1;
-  //       distances[i][j] = Math.min(
-  //         distances[i - 1][j] + 1, // Deletion
-  //         distances[i][j - 1] + 1, // Insertion
-  //         distances[i - 1][j - 1] + cost // Substitution
-  //       );
-  //     }
-  //   }
-  
-  //   // Return the Levenshtein distance between the two strings
-  //   return distances[s1.length][s2.length];
-  // }
-  
-  // function replaceSimilarStrings(message, target, replacement) {
-  //   // Split the input message into an array of words
-  //   const words = message.split(" ");
-  
-  //   // Loop through each word and replace it if it is similar to the target
-  //   for (let i = 0; i < words.length; i++) {
-  //     const distance = levenshteinDistance(words[i], target);
-  //     if (distance <= 2) { // Replace any word within a Levenshtein distance of 2 from the target
-  //       words[i] = replacement;
-  //     }
-  //   }
-  
-  //   // Join the words back into a single string and return it
-  //   return words.join(" ");
-  // }
-  
-  // let message = req.body.message;
-  // message = replaceSimilarStrings(message, "aziz", "aziz","azizsupermarket","aziz super marker");
-  // message = replaceSimilarStrings(message, "ctg", "ctg","");
-  
-  // message = message.replace(/aza|ajij|azizsupermarket|ajej/gi, "aziz");
-  // message = message.replace(/ctgg|chattagram|ctgee/gi, "ctg");
 
-  function levenshteinDistance(s1, s2) {
-    // Create a 2D array to store the Levenshtein distances
-    const distances = [];
-  
-    // Initialize the first row and column with incremental values
-    for (let i = 0; i <= s1.length; i++) {
-      distances[i] = [i];
-    }
-    for (let j = 0; j <= s2.length; j++) {
-      distances[0][j] = j;
-    }
-  
-    // Compute the Levenshtein distances
-    for (let i = 1; i <= s1.length; i++) {
-      for (let j = 1; j <= s2.length; j++) {
-        const cost = s1[i - 1].toLowerCase() === s2[j - 1].toLowerCase() ? 0 : 1;
-        distances[i][j] = Math.min(
-          distances[i - 1][j] + 1, // Deletion
-          distances[i][j - 1] + 1, // Insertion
-          distances[i - 1][j - 1] + cost // Substitution
-        );
-      }
-    }
-  
-    // Return the Levenshtein distance between the two strings
-    return distances[s1.length][s2.length];
-  }
-  
-  function replaceSimilarStrings(message, target, replacement) {
-    // Split the input message into an array of words
-    const words = message.split(" ");
-  
-    // Loop through each word and replace it if it is similar to the target
-    for (let i = 0; i < words.length; i++) {
-      const distance = levenshteinDistance(words[i].toLowerCase(), target.toLowerCase());
-      if (distance <= 2) { // Replace any word within a Levenshtein distance of 2 from the target
-        words[i] = replacement;
-      }
-    }
-  
-    // Join the words back into a single string and return it
-    return words.join(" ");
-  }
-  
   let message = req.body.message;
-  message = replaceSimilarStrings(message, "aziz", "aziz","azizsupermarket", "ajijsupermarket","aziz super market","azizsuper market","aziz supermarket","ajij super market","ajijsuper market","ajiij supermarket","ajij","ajej","azez");
-  message = replaceSimilarStrings(message, "ctg", "ctg","chattagram","chittagong","chittagonj","chottogram","chattagram","chattogram");
-  message = replaceSimilarStrings(message, "dhk", "dhk","dhaka");
-  message = replaceSimilarStrings(message, "syl", "syl","sylhet");
-  message = replaceSimilarStrings(message, "price", "price");
-  message = replaceSimilarStrings(message, "ecom", "ecom","ecommerce");
-   message = message.replace(/bb|bB|BB|Bb|bangla bazar|banglabazar|Bangla Bazar|BANGLA BAZAR/gi, "bb");
 
+
+  message = message.replace(/aza|ajes|azej|ajez|ajij|azz|azziz|a(z|i|j|e)s(?!\s*(super\s*)?(market|store|center))/gi, "aziz");
+  message = message.replace(/bangla\s*bazar|banglabazar|bangla\s*baza*r*|b\s*bazar|\bbangla\b|b\s*baza*r*/gi, "bb");
+  message = message.replace(/BB|bb/gi, "bb");
+  message = message.replace(/\bdhk\b|\bdhaka\b/gi, "dhk");
+  message = message.replace(/\bdh(?:aka|aka\s*city|aka\s*metropolitan)?\b|\bdhk\b|\bdacca\b|\bdekha\b|\bdhoka\b|\bdakka\b|\bdhokka\b|\bdhakka\b|\bdaccka\b|\bdhak\b|\bdhacca\b/gi, "dhk");
+  message = message.replace(/\bpric(es|ed|ing)?\b/gi, "price");
+  message = message.replace(/\bpr[ic][ie]?[sz]?(\s*[ck]ost)?(\s*[ck]o[st])?(\s*p)?/gi, "price");
+  message = message.replace(/\bctg\b|\bchittagong\b|\bchittagng\b| \bchttogm\b|\bchittgong\b|\bchittagram\b|\bchattogram\b|\bchittagrom\b|\bchattagam\b|\bchattagrm\b|\bchattaram\b|\bchattagm\b|\bchittagorm\b|\bchattagong\b|\bchattagram\b|\bchatga\b|\bchatg\b|\bchtg\b|\bctgcity\b|\bctgcitycorp\b|\bctgcorp\b|\bctgport\b|\bchittagongport\b|\bctgcitycorporation\b|\bchittagongcity\b|\bchittagongcitycorp\b/gi, "ctg");
+  message = message.replace(/\bsyl(?!(het|khet))\b|\bsylhet\b|\bsyhle\b|\bsyleh\b|\bsileta\b|\bsiletta\b|\bsailet\b|\bsaillet\b|\bsyleth\b|\bsyhlet\b|\bsyhleth\b|\bsyle\b|\bsyhleth\b|\bsyllet\b|\bsailette\b|\bsylette\b/gi, "syl");
+  message = message.replace(/\be\s*c\s*o\s*m\s*(m\s*e\s*r\s*c\s*e\s*)?(?!\s*[^\s]*?log)/gi, "ecommerce");
 
 
   const properties = [
@@ -146,9 +56,9 @@ async function getInformation(req, res) {
    
    
 
-    const matches2 = stringSimilarity.findBestMatch(message, dataArray.map(d => d.name)  );
+    const matches2 = stringSimilarity.findBestMatch(message.toLowerCase(), dataArray.map(d => d.name.toLowerCase()));
     let matchedItems2 = []; 
-    if (matches2.bestMatch.rating > 0.3) {
+    if (matches2.bestMatch.rating > 0.2) {
       const matchedItem2 = dataArray[matches2.bestMatchIndex];
       matchedItems2.push(matchedItem2);
     } else {
