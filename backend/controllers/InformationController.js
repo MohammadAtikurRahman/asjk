@@ -90,7 +90,7 @@ async function getInformation(req, res) {
     if (matchingData2) {
              if(queries2.length === 0){
       res.json({
-        botResponse: `\n\n${matchingData2.name} is available in Dhaka  ${matchingData2.dhk}. Aziz Super Market   ${matchingData2.aziz}.  Chittagong  ${matchingData2.ctg} . Sylhet   ${matchingData2.syl}.  Bangla Bazar   ${matchingData2.bb}.   Ecommerce   ${matchingData2.ecom}.`,
+        botResponse: `\n\n${matchingData2.name} is available in Dhaka ${matchingData2.dhk}. Aziz Super Market ${matchingData2.aziz}. Chittagong ${matchingData2.ctg}. Sylhet ${matchingData2.syl}. Bangla Bazar ${matchingData2.bb}. Ecommerce ${matchingData2.ecom}.`,
       });
       return;
        }
