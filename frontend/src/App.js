@@ -208,7 +208,7 @@ function App() {
             setChatLog={setChatLog}
           />
         )}
-        <NavLinks
+        {/* <NavLinks
           svg={
             <svg
               viewBox="0 0 24 24"
@@ -230,7 +230,7 @@ function App() {
           }
           text="OpenAI Discord"
           link="https://discord.com/invite/openai"
-        />
+        /> */}
         <NavLinks
           svg={
             <svg
