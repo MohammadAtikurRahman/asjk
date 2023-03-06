@@ -23,7 +23,112 @@ const processData = (data) => {
 
 
 async function getInformation(req, res) {
+  // function levenshteinDistance(s1, s2) {
+  //   // Create a 2D array to store the Levenshtein distances
+  //   const distances = [];
+  
+  //   // Initialize the first row and column with incremental values
+  //   for (let i = 0; i <= s1.length; i++) {
+  //     distances[i] = [i];
+  //   }
+  //   for (let j = 0; j <= s2.length; j++) {
+  //     distances[0][j] = j;
+  //   }
+  
+  //   // Compute the Levenshtein distances
+  //   for (let i = 1; i <= s1.length; i++) {
+  //     for (let j = 1; j <= s2.length; j++) {
+  //       const cost = s1[i - 1] === s2[j - 1] ? 0 : 1;
+  //       distances[i][j] = Math.min(
+  //         distances[i - 1][j] + 1, // Deletion
+  //         distances[i][j - 1] + 1, // Insertion
+  //         distances[i - 1][j - 1] + cost // Substitution
+  //       );
+  //     }
+  //   }
+  
+  //   // Return the Levenshtein distance between the two strings
+  //   return distances[s1.length][s2.length];
+  // }
+  
+  // function replaceSimilarStrings(message, target, replacement) {
+  //   // Split the input message into an array of words
+  //   const words = message.split(" ");
+  
+  //   // Loop through each word and replace it if it is similar to the target
+  //   for (let i = 0; i < words.length; i++) {
+  //     const distance = levenshteinDistance(words[i], target);
+  //     if (distance <= 2) { // Replace any word within a Levenshtein distance of 2 from the target
+  //       words[i] = replacement;
+  //     }
+  //   }
+  
+  //   // Join the words back into a single string and return it
+  //   return words.join(" ");
+  // }
+  
+  // let message = req.body.message;
+  // message = replaceSimilarStrings(message, "aziz", "aziz","azizsupermarket","aziz super marker");
+  // message = replaceSimilarStrings(message, "ctg", "ctg","");
+  
+  // message = message.replace(/aza|ajij|azizsupermarket|ajej/gi, "aziz");
+  // message = message.replace(/ctgg|chattagram|ctgee/gi, "ctg");
+
+  function levenshteinDistance(s1, s2) {
+    // Create a 2D array to store the Levenshtein distances
+    const distances = [];
+  
+    // Initialize the first row and column with incremental values
+    for (let i = 0; i <= s1.length; i++) {
+      distances[i] = [i];
+    }
+    for (let j = 0; j <= s2.length; j++) {
+      distances[0][j] = j;
+    }
+  
+    // Compute the Levenshtein distances
+    for (let i = 1; i <= s1.length; i++) {
+      for (let j = 1; j <= s2.length; j++) {
+        const cost = s1[i - 1].toLowerCase() === s2[j - 1].toLowerCase() ? 0 : 1;
+        distances[i][j] = Math.min(
+          distances[i - 1][j] + 1, // Deletion
+          distances[i][j - 1] + 1, // Insertion
+          distances[i - 1][j - 1] + cost // Substitution
+        );
+      }
+    }
+  
+    // Return the Levenshtein distance between the two strings
+    return distances[s1.length][s2.length];
+  }
+  
+  function replaceSimilarStrings(message, target, replacement) {
+    // Split the input message into an array of words
+    const words = message.split(" ");
+  
+    // Loop through each word and replace it if it is similar to the target
+    for (let i = 0; i < words.length; i++) {
+      const distance = levenshteinDistance(words[i].toLowerCase(), target.toLowerCase());
+      if (distance <= 2) { // Replace any word within a Levenshtein distance of 2 from the target
+        words[i] = replacement;
+      }
+    }
+  
+    // Join the words back into a single string and return it
+    return words.join(" ");
+  }
+  
   let message = req.body.message;
+  message = replaceSimilarStrings(message, "aziz", "aziz","azizsupermarket", "ajijsupermarket","aziz super market","azizsuper market","aziz supermarket","ajij super market","ajijsuper market","ajiij supermarket","ajij","ajej","azez");
+  message = replaceSimilarStrings(message, "ctg", "ctg","chattagram","chittagong","chittagonj","chottogram","chattagram","chattogram");
+  message = replaceSimilarStrings(message, "dhk", "dhk","dhaka");
+  message = replaceSimilarStrings(message, "syl", "syl","sylhet");
+  message = replaceSimilarStrings(message, "price", "price");
+  message = replaceSimilarStrings(message, "ecom", "ecom","ecommerce");
+   message = message.replace(/bb|bB|BB|Bb|bangla bazar|banglabazar|Bangla Bazar|BANGLA BAZAR/gi, "bb");
+
+
+
   const properties = [
     { name: "name", property: "name" },
     { name: "aziz", property: "aziz" },
