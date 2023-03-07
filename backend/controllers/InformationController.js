@@ -144,7 +144,12 @@ async function getInformation(req, res) {
             temperature: 0.5,
           },
         });
+
+
         return res.json({ botResponse: "\n" + response.data.choices[0].text });
+
+
+        
       } catch (error) {
         return res
           .status(500)
@@ -195,7 +200,15 @@ async function getInformation(req, res) {
 
 
 
-
+    const replacements = {
+      'dhk': 'Dhaka',
+      'syl': 'Sylhet',
+      'bb': 'Bangla Bazar',
+      'aziz': 'Aziz Super Market',
+      'ecom': 'Ecommerce',
+      'ctg': 'Chittagong'
+    };
+    
 
 
 
@@ -219,7 +232,23 @@ async function getInformation(req, res) {
       return prev + ` ${Object.keys(curr)[0]}: ${curr[Object.keys(curr)[0]]} `;
     }, "");
 
-    return res.json({ botResponse: `\n\n`+ "  "+ itemName.name+" " + response });
+
+    let modifiedResponse = response;
+    for (const [key, value] of Object.entries(replacements)) {
+      modifiedResponse = modifiedResponse.replace(key, value);
+    }
+    
+    
+  //  return res.json({ botResponse: `\n\n${itemName.name} ${modifiedResponse.replace(/:/g, '')}.` });
+
+
+    // return res.json({ botResponse: `\n\n${itemName.name} ${modifiedResponse.replace(/:/g, '')}.`.replace(/\. /g, '.  ') });
+
+
+    return res.json({ botResponse: `\n\n${itemName.name} is available in${modifiedResponse.replace(/:/g, '').replace(/(\d)\s/g, '$1.')}` });
+
+
+
   }
 }
 
