@@ -18,33 +18,10 @@ const stringSimilarity = require("string-similarity");
 // };
 
 
-// const API_ENDPOINT = 'https://baatighar.com/openai_chatgpt/products/dataset';
-// const API_KEY = 'wO8oenVz5Qbg9GNqGel2OcBNbbA';
 
-// let dataArray = [];
-
-// axios.get(API_ENDPOINT, {
-//   headers: {
-//     'X-Authorization': API_KEY
-//   },
-//   responseType: 'stream'
-// })
-//   .then(response => {
-//     response.data.pipe(csv())
-//       .on('data', (row) => {
-//         dataArray.push(row);
-//       })
-//       .on('end', () => {
-//         console.log(dataArray);
-//       });
-//   })
-//   .catch(error => {
-//     console.error(error);
-//   });
 
 const API_ENDPOINT = 'https://baatighar.com/openai_chatgpt/products/dataset';
 const API_KEY = 'wO8oenVz5Qbg9GNqGel2OcBNbbA';
-
 const headers = [
   'name',
   'aziz',
@@ -84,7 +61,6 @@ axios.get(API_ENDPOINT, {
   .catch(error => {
     console.error(error);
   });
-
 
 
   
