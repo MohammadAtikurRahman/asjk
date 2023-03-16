@@ -4,17 +4,20 @@ const BotResponse = ({ response }) => {
   const [botResponse, setBotResponse] = useState("");
   const containerRef = useRef(null);
 
+  // useEffect(() => {
+  //   let index = 1;
+  //   let msg = setInterval(() => {
+  //     setBotResponse(response.slice(0, index));
+  //     if (index >= response.length) {
+  //       clearInterval(msg);
+  //     }
+  //     index++;
+  //   }, 1);
+  // }, [response]);
   useEffect(() => {
-    let index = 1;
-    let msg = setInterval(() => {
-      setBotResponse(response.slice(0, index));
-      if (index >= response.length) {
-        clearInterval(msg);
-      }
-      index++;
-    }, 100);
+    setBotResponse(response);
   }, [response]);
-
+  
   
   const scrollToBottom = () => {
     containerRef.current?.scrollIntoView({ behavior: "smooth" });

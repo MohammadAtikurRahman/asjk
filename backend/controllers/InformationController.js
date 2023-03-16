@@ -69,9 +69,13 @@ async function getInformation(req, res) {
   let message = req.body.message;
 
   message = message.replace(
-    /aza|ajes|azej|ajez|ajij|azz|azziz|a(z|i|j|e)s(?!\s*(super\s*)?(market|store|center))/gi,
+    /\b(aza|ajes|azej|ajez|ajij|azz|azziz|a[zijes]\w*|\b(super\s*(market|store|center)|market\s*super)\b|as(?=.*\bsuper\s*(market|store|center))|ae(?=.*\bsuper\s*(market|store|center))|aj(?=.*\bsuper\s*(market|store|center))|ai(?=.*\bsuper\s*(market|store|center)))\b/gi,
     "aziz"
   );
+  
+  
+
+
   message = message.replace(
     /bangla\s*bazar|banglabazar|bangla\s*baza*r*|b\s*bazar|\bbangla\b|b\s*baza*r*/gi,
     "bb"
@@ -234,11 +238,20 @@ async function getInformation(req, res) {
 
     // return res.json({ botResponse: `\n\n${itemName.name} ${modifiedResponse.replace(/:/g, '')}.`.replace(/\. /g, '.  ') });
 
-    return res.json({
-      botResponse: `\n\n${itemName.name} is available in${modifiedResponse
-        .replace(/:/g, "")
-        .replace(/(\d)\s/g, "$1.")}`,
-    });
+    let responseText = modifiedResponse.replace(/:/g, "").replace(/(\d)\s/g, "$1.");
+
+    if (responseText.includes("price")) {
+      // If response contains a price, don't display "is available"
+      return res.json({
+        botResponse: `\n\n${itemName.name} ${responseText.replace("price", "Price")}`,
+      });
+    } else {
+      // If response doesn't contain a price, display "is available"
+      return res.json({
+        botResponse: `\n\n${itemName.name} is available in ${responseText}`,
+      });
+    }
+    
   }
 }
 
