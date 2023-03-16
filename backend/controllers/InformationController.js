@@ -243,7 +243,7 @@ async function getInformation(req, res) {
     if (responseText.includes("price")) {
       // If response contains a price, don't display "is available"
       return res.json({
-        botResponse: `\n\n${itemName.name} ${responseText.replace("price", "Price")}`,
+        botResponse: `\n\n${itemName.name}${responseText.replace("price", "Price")}`,
       });
     } else {
       // If response doesn't contain a price, display "is available"
