@@ -231,7 +231,7 @@ function App() {
           text="OpenAI Discord"
           link="https://discord.com/invite/openai"
         /> */}
-        <NavLinks
+        {/* <NavLinks
           svg={
             <svg
               viewBox="0 0 24 24"
@@ -251,7 +251,7 @@ function App() {
           }
           text="Updates & FAQ"
           link="https://help.openai.com/en/collections/3742473-chatgpt"
-        />
+        /> */}
       </aside>
 
       <section className="chatBox">
