@@ -2,6 +2,7 @@ const fs = require("fs");
 const csv = require("csv-parser");
 const axios = require("axios");
 const stringSimilarity = require("string-similarity");
+const talisman = require("talisman/metrics/jaro-winkler");
 
 // let dataArray = [];
 // fs.createReadStream("idiya.csv")
@@ -116,20 +117,44 @@ async function getInformation(req, res) {
   ];
 
   for (const prop of properties) {
-    const threshold = 0.5; // Adjust this value to control the similarity threshold
-
-    const matches2 = stringSimilarity.findBestMatch(
-      message.toLowerCase(),
-      dataArray.map((d) => d.name.toLowerCase())
-    );
+   
+   
+    const stringSimilarity = require("string-similarity");
+    const talisman = require("talisman/metrics/jaro-winkler");
     
-    let matchedItems2 = [];
+    function containsNonLatin(str) {
+      return /[^\u0000-\u007F]/.test(str);
+    }
     
-    matches2.ratings.forEach((rating, index) => {
-      if (rating.rating > threshold) {
-        matchedItems2.push(dataArray[index]);
+    function getRatingsAndThreshold(message, dataArray) {
+      const messageLowerCase = message.toLowerCase();
+      const useTalisman = containsNonLatin(message);
+    
+      if (useTalisman) {
+        const ratings = dataArray.map((d) => ({
+          rating: talisman(messageLowerCase, d.name.toLowerCase()),
+          item: d,
+        }));
+        return { ratings, threshold: 0.755 }; // Adjust this value for the talisman threshold
+      } else {
+        const matches = stringSimilarity.findBestMatch(
+          messageLowerCase,
+          dataArray.map((d) => d.name.toLowerCase())
+        );
+        const ratings = matches.ratings.map((rating, index) => ({
+          rating: rating.rating,
+          item: dataArray[index],
+        }));
+        return { ratings, threshold: 0.4 }; // Adjust this value for the string-similarity threshold
       }
-    });
+    }
+    
+    const { ratings, threshold } = getRatingsAndThreshold(message, dataArray);
+    
+    const matchedItems2 = ratings
+      .filter((r) => r.rating > threshold)
+      .sort((a, b) => b.rating - a.rating)
+      .map((r) => r.item);
     
     if (matchedItems2.length === 0) {
       console.log("No match found");
@@ -138,13 +163,98 @@ async function getInformation(req, res) {
       matchedItems2.forEach((item) => console.log(item));
     }
     
+
+    // const stringSimilarity = require("string-similarity");
+    // const talisman = require("talisman/metrics/jaro-winkler");
+    
+    // function containsNonLatin(str) {
+    //   return /[^\u0000-\u007F]/.test(str);
+    // }
+    
+    // function getRatingsAndThreshold(message, dataArray) {
+    //   const messageLowerCase = message.toLowerCase();
+    //   const useTalisman = containsNonLatin(message);
+    
+    //   if (useTalisman) {
+    //     const ratings = dataArray.map((d) => ({
+    //       rating: talisman(messageLowerCase, d.name.toLowerCase()),
+    //       item: d,
+    //     }));
+    //     return { ratings, threshold: 0.755 }; // Adjust this value for the talisman threshold
+    //   } else {
+    //     const matches = stringSimilarity.findBestMatch(
+    //       messageLowerCase,
+    //       dataArray.map((d) => d.name.toLowerCase())
+    //     );
+    //     const ratings = matches.ratings.map((rating, index) => ({
+    //       rating: rating.rating,
+    //       item: dataArray[index],
+    //     }));
+    //     return { ratings, threshold: 0.4 }; // Adjust this value for the string-similarity threshold
+    //   }
+    // }
+    
+    // const { ratings, threshold } = getRatingsAndThreshold(message, dataArray);
+    
+    // const matchedItems2 = ratings
+    //   .filter((r) => r.rating > threshold)
+    //   .map((r) => r.item);
+    
+    // if (matchedItems2.length === 0) {
+    //   console.log("No match found");
+    // } else {
+    //   console.log("Results:");
+    //   matchedItems2.forEach((item) => console.log(item));
+    // }
     
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   
+    // const threshold = 0.4; // Adjust this value to control the similarity threshold
+
+    // const matches2 = stringSimilarity.findBestMatch(
+    //   message.toLowerCase(),
+    //   dataArray.map((d) => d.name.toLowerCase())
+    // );
+    
+    // let matchedItems2 = [];
+    
+    // matches2.ratings.forEach((rating, index) => {
+    //   if (rating.rating > threshold) {
+    //     matchedItems2.push(dataArray[index]);
+    //   }
+    // });
+    
+    // if (matchedItems2.length === 0) {
+    //   console.log("No match found");
+    // } else {
+    //   console.log("Results:");
+    //   matchedItems2.forEach((item) => console.log(item));
+    // }
+    
+    
+
+
+
+    
     // const matchingData2 = dataArray.find((d) => d.name === message || message.includes("stock") || message.includes("available"));
 
     // console.log("matching data 2", matchingData2);
 
-    const matchingData3 = dataArray.find((d) => d.sku === message);
+    // const matchingData3 = dataArray.find((d) => d.sku === message);
 
     const queries2 = properties.filter((p) => message.includes(p.name));
 
@@ -166,13 +276,13 @@ async function getInformation(req, res) {
     
     
     
-    else if (matchingData3) {
-      res.json({
-        botResponse: `\n\n${matchingData3.name} of : ${matchingData3.description}
-          }`,
-      });
-      return;
-    }
+    // else if (matchingData3) {
+    //   res.json({
+    //     botResponse: `\n\n${matchingData3.name} of : ${matchingData3.description}
+    //       }`,
+    //   });
+    //   return;
+    // }
 
     const matches = stringSimilarity.findBestMatch(
       message,
@@ -188,6 +298,13 @@ async function getInformation(req, res) {
     // console.log("matched item:", matchedItems[0]);
     const itemName = matchedItems[0];
     // console.log("ok version", itemName);
+
+
+
+
+
+
+    
 
     if (!itemName) {
       try {
