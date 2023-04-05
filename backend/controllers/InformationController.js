@@ -69,7 +69,7 @@ async function getInformation(req, res) {
   let message = req.body.message;
 
   message = message.replace(
-    /\b(aza|ajes|azej|ajez|ajij|azz|azziz|a[zijes]\w*|\b(super\s*(market|store|center)|market\s*super)\b|as(?=.*\bsuper\s*(market|store|center))|ae(?=.*\bsuper\s*(market|store|center))|aj(?=.*\bsuper\s*(market|store|center))|ai(?=.*\bsuper\s*(market|store|center)))\b/gi,
+    /\b(aziz|azej|ajez|ajij|azz|\b(super\s*(market|store|center)|market\s*super)\b|as(?=.*\bsuper\s*(market|store|center))|ae(?=.*\bsuper\s*(market|store|center))|aj(?=.*\bsuper\s*(market|store|center))|ai(?=.*\bsuper\s*(market|store|center)))\b/gi,
     "aziz"
   );
   
@@ -116,20 +116,29 @@ async function getInformation(req, res) {
   ];
 
   for (const prop of properties) {
+    const threshold = 0.5; // Adjust this value to control the similarity threshold
+
     const matches2 = stringSimilarity.findBestMatch(
       message.toLowerCase(),
       dataArray.map((d) => d.name.toLowerCase())
     );
+    
     let matchedItems2 = [];
-    if (matches2.bestMatch.rating > 0.2) {
-      const matchedItem2 = dataArray[matches2.bestMatchIndex];
-      matchedItems2.push(matchedItem2);
-    } else {
+    
+    matches2.ratings.forEach((rating, index) => {
+      if (rating.rating > threshold) {
+        matchedItems2.push(dataArray[index]);
+      }
+    });
+    
+    if (matchedItems2.length === 0) {
       console.log("No match found");
+    } else {
+      console.log("Results:");
+      matchedItems2.forEach((item) => console.log(item));
     }
-    // console.log("matched item:", matchedItems2[0]);
-    const matchingData2 = matchedItems2[0];
-    // console.log("ok version 2", matchingData2);
+    
+    
 
     // const matchingData2 = dataArray.find((d) => d.name === message || message.includes("stock") || message.includes("available"));
 
@@ -141,14 +150,23 @@ async function getInformation(req, res) {
 
     // console.log("matching queries 2", queries2);
 
-    if (matchingData2) {
+    if (matchedItems2.length > 0) {
       if (queries2.length === 0) {
+        let botResponse = "";
+        matchedItems2.forEach((item) => {
+          botResponse += `\n\n${item.name} is available in Dhaka ${item.dhk}, Aziz Super Market ${item.aziz}, Chittagong ${item.ctg}, Sylhet ${item.syl}, Bangla Bazar ${item.bb}, Ecommerce ${item.ecom}.`;
+        });
+    
         res.json({
-          botResponse: `\n\n${matchingData2.name} is available in Dhaka ${matchingData2.dhk}. Aziz Super Market ${matchingData2.aziz}. Chittagong ${matchingData2.ctg}. Sylhet ${matchingData2.syl}. Bangla Bazar ${matchingData2.bb}. Ecommerce ${matchingData2.ecom}.`,
+          botResponse: botResponse,
         });
         return;
       }
-    } else if (matchingData3) {
+    }
+    
+    
+    
+    else if (matchingData3) {
       res.json({
         botResponse: `\n\n${matchingData3.name} of : ${matchingData3.description}
           }`,
