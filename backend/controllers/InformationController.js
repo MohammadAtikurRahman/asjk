@@ -55,7 +55,7 @@ axios.get(API_ENDPOINT, {
         dataArray.push(newRow);
       })
       .on('end', () => {
-        console.log(dataArray);
+        // console.log(dataArray);
       });
   })
   .catch(error => {
