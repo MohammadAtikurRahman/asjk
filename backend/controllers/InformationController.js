@@ -135,7 +135,7 @@ async function getInformation(req, res) {
           rating: talisman(messageLowerCase, d.name.toLowerCase()),
           item: d,
         }));
-        return { ratings, threshold: 0.755 }; // Adjust this value for the talisman threshold
+        return { ratings, threshold: 0.75 }; // Adjust this value for the talisman threshold
       } else {
         const matches = stringSimilarity.findBestMatch(
           messageLowerCase,
@@ -258,8 +258,6 @@ async function getInformation(req, res) {
 
     const queries2 = properties.filter((p) => message.includes(p.name));
 
-    // console.log("matching queries 2", queries2);
-
     if (matchedItems2.length > 0) {
       if (queries2.length === 0) {
         let botResponse = "";
@@ -273,16 +271,7 @@ async function getInformation(req, res) {
         return;
       }
     }
-    
-    
-    
-    // else if (matchingData3) {
-    //   res.json({
-    //     botResponse: `\n\n${matchingData3.name} of : ${matchingData3.description}
-    //       }`,
-    //   });
-    //   return;
-    // }
+   
 
     const matches = stringSimilarity.findBestMatch(
       message,
@@ -304,7 +293,7 @@ async function getInformation(req, res) {
 
 
 
-    
+
 
     if (!itemName) {
       try {
@@ -335,6 +324,9 @@ async function getInformation(req, res) {
 
     const queries = properties.filter((p) => message.includes(p.name));
 
+
+
+
     console.log("matching queries", queries);
 
     const replacements = {
@@ -364,15 +356,13 @@ async function getInformation(req, res) {
       return prev + ` ${Object.keys(curr)[0]}: ${curr[Object.keys(curr)[0]]} `;
     }, "");
 
+
+
+
     let modifiedResponse = response;
     for (const [key, value] of Object.entries(replacements)) {
       modifiedResponse = modifiedResponse.replace(key, value);
     }
-
-    //  return res.json({ botResponse: `\n\n${itemName.name} ${modifiedResponse.replace(/:/g, '')}.` });
-
-    // return res.json({ botResponse: `\n\n${itemName.name} ${modifiedResponse.replace(/:/g, '')}.`.replace(/\. /g, '.  ') });
-
     let responseText = modifiedResponse.replace(/:/g, "").replace(/(\d)\s/g, "$1.");
 
     if (responseText.includes("price")) {
@@ -380,13 +370,20 @@ async function getInformation(req, res) {
       return res.json({
         botResponse: `\n\n${itemName.name}${responseText.replace("price", "Price")}`,
       });
-    } else {
+    } 
+    
+    else {
       // If response doesn't contain a price, display "is available"
       return res.json({
         botResponse: `\n\n${itemName.name} is available in ${responseText}`,
       });
     }
     
+
+
+
+
+
   }
 }
 
