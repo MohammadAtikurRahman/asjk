@@ -127,6 +127,19 @@ async function getInformation(req, res) {
     }
     
     function getRatingsAndThreshold(message, dataArray) {
+      message = message.replace(/pricece/gi, "").trim();
+      message = message.replace(/aziz/gi, "").trim();
+      message = message.replace(/dhk/gi, "").trim();
+      message = message.replace(/ctg/gi, "").trim();
+      message = message.replace(/syl/gi, "").trim();
+      message = message.replace(/bb/gi, "").trim();
+      message = message.replace(/ecommerce/gi, "").trim();
+
+
+
+
+       console.log("checking",message);
+
       const messageLowerCase = message.toLowerCase();
       const useTalisman = containsNonLatin(message);
     
@@ -148,6 +161,12 @@ async function getInformation(req, res) {
         return { ratings, threshold: 0.4 }; // Adjust this value for the string-similarity threshold
       }
     }
+
+
+
+
+
+    
     
     const { ratings, threshold } = getRatingsAndThreshold(message, dataArray);
     
@@ -164,105 +183,19 @@ async function getInformation(req, res) {
     }
     
 
-    // const stringSimilarity = require("string-similarity");
-    // const talisman = require("talisman/metrics/jaro-winkler");
-    
-    // function containsNonLatin(str) {
-    //   return /[^\u0000-\u007F]/.test(str);
-    // }
-    
-    // function getRatingsAndThreshold(message, dataArray) {
-    //   const messageLowerCase = message.toLowerCase();
-    //   const useTalisman = containsNonLatin(message);
-    
-    //   if (useTalisman) {
-    //     const ratings = dataArray.map((d) => ({
-    //       rating: talisman(messageLowerCase, d.name.toLowerCase()),
-    //       item: d,
-    //     }));
-    //     return { ratings, threshold: 0.755 }; // Adjust this value for the talisman threshold
-    //   } else {
-    //     const matches = stringSimilarity.findBestMatch(
-    //       messageLowerCase,
-    //       dataArray.map((d) => d.name.toLowerCase())
-    //     );
-    //     const ratings = matches.ratings.map((rating, index) => ({
-    //       rating: rating.rating,
-    //       item: dataArray[index],
-    //     }));
-    //     return { ratings, threshold: 0.4 }; // Adjust this value for the string-similarity threshold
-    //   }
-    // }
-    
-    // const { ratings, threshold } = getRatingsAndThreshold(message, dataArray);
-    
-    // const matchedItems2 = ratings
-    //   .filter((r) => r.rating > threshold)
-    //   .map((r) => r.item);
-    
-    // if (matchedItems2.length === 0) {
-    //   console.log("No match found");
-    // } else {
-    //   console.log("Results:");
-    //   matchedItems2.forEach((item) => console.log(item));
-    // }
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-   
-    // const threshold = 0.4; // Adjust this value to control the similarity threshold
-
-    // const matches2 = stringSimilarity.findBestMatch(
-    //   message.toLowerCase(),
-    //   dataArray.map((d) => d.name.toLowerCase())
-    // );
-    
-    // let matchedItems2 = [];
-    
-    // matches2.ratings.forEach((rating, index) => {
-    //   if (rating.rating > threshold) {
-    //     matchedItems2.push(dataArray[index]);
-    //   }
-    // });
-    
-    // if (matchedItems2.length === 0) {
-    //   console.log("No match found");
-    // } else {
-    //   console.log("Results:");
-    //   matchedItems2.forEach((item) => console.log(item));
-    // }
-    
-    
-
-
-
-    
-    // const matchingData2 = dataArray.find((d) => d.name === message || message.includes("stock") || message.includes("available"));
-
-    // console.log("matching data 2", matchingData2);
-
-    // const matchingData3 = dataArray.find((d) => d.sku === message);
+    console.log("beyond the everything",matchedItems2)
 
     const queries2 = properties.filter((p) => message.includes(p.name));
 
-    if (matchedItems2.length > 0) {
-      if (queries2.length === 0) {
+    console.log("queerrr",queries2)
+
+    if (matchedItems2.length > 0 ) {
+      if(queries2.length === 0) {
+
         let botResponse = "";
         matchedItems2.forEach((item) => {
           botResponse += `\n\n${item.name} is available in Dhaka ${item.dhk}, Aziz Super Market ${item.aziz}, Chittagong ${item.ctg}, Sylhet ${item.syl}, Bangla Bazar ${item.bb}, Ecommerce ${item.ecom}.`;
+    
         });
     
         res.json({
@@ -271,113 +204,227 @@ async function getInformation(req, res) {
         return;
       }
     }
-   
-
-    const matches = stringSimilarity.findBestMatch(
-      message,
-      dataArray.map((d) => d.name)
-    );
-    let matchedItems = [];
-    if (matches.bestMatch.rating > 0.3) {
-      const matchedItem = dataArray[matches.bestMatchIndex];
-      matchedItems.push(matchedItem);
-    } else {
-      console.log("No match found");
-    }
-    // console.log("matched item:", matchedItems[0]);
-    const itemName = matchedItems[0];
-    // console.log("ok version", itemName);
 
 
+    if (queries2.some(query => query.name === 'price')) {
 
-
-
-
-
-
-    if (!itemName) {
-      try {
-        const API_KEY = process.env.OPENAI_API_KEY;
-        const response = await axios({
-          method: "post",
-          url: "https://api.openai.com/v1/engines/text-davinci-003/completions",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${API_KEY}`,
-          },
-          data: {
-            prompt: message,
-            max_tokens: 100,
-            n: 1,
-            stop: "",
-            temperature: 0.5,
-          },
-        });
-
-        return res.json({ botResponse: "\n" + response.data.choices[0].text });
-      } catch (error) {
-        return res
-          .status(500)
-          .send({ error: "Could not generate text completion" });
-      }
-    }
-
-    const queries = properties.filter((p) => message.includes(p.name));
-
-
-
-
-    console.log("matching queries", queries);
-
-    const replacements = {
-      dhk: "Dhaka",
-      syl: "Sylhet",
-      bb: "Bangla Bazar",
-      aziz: "Aziz Super Market",
-      ecom: "Ecommerce",
-      ctg: "Chittagong",
-    };
-
-    const result = queries
-      .map((q) => {
-        const data = dataArray.find((d) => d.name === itemName.name);
-        if (!data || !data[q.property]) {
-          return null;
-        }
-
-        return { [q.name]: data[q.property] };
-      })
-      .filter((r) => r !== null);
-    if (result.length === 0) {
-      return res.status(400).json({ error: "No matching data found" });
-    }
-
-    const response = result.reduce((prev, curr) => {
-      return prev + ` ${Object.keys(curr)[0]}: ${curr[Object.keys(curr)[0]]} `;
-    }, "");
-
-
-
-
-    let modifiedResponse = response;
-    for (const [key, value] of Object.entries(replacements)) {
-      modifiedResponse = modifiedResponse.replace(key, value);
-    }
-    let responseText = modifiedResponse.replace(/:/g, "").replace(/(\d)\s/g, "$1.");
-
-    if (responseText.includes("price")) {
-      // If response contains a price, don't display "is available"
-      return res.json({
-        botResponse: `\n\n${itemName.name}${responseText.replace("price", "Price")}`,
+      let botResponse = "";
+      matchedItems2.forEach((item) => {
+        botResponse += `\n\n${item.name} Price: ${item.price} .`;
+  
       });
+  
+      res.json({
+        botResponse: botResponse,
+      });
+      return;
+
     } 
     
-    else {
-      // If response doesn't contain a price, display "is available"
-      return res.json({
-        botResponse: `\n\n${itemName.name} is available in ${responseText}`,
+
+
+    if (queries2.some(query => query.name === 'aziz')) {
+
+      let botResponse = "";
+      matchedItems2.forEach((item) => {
+        botResponse += `\n\n${item.name} is available in  Aziz Super Market ${item.aziz} .`;
+  
       });
-    }
+  
+      res.json({
+        botResponse: botResponse,
+      });
+      return;
+
+    } 
+    
+
+
+    if (queries2.some(query => query.name === 'dhk')) {
+
+      let botResponse = "";
+      matchedItems2.forEach((item) => {
+        botResponse += `\n\n${item.name} is available in Dhaka ${item.dhk} .`;
+  
+      });
+  
+      res.json({
+        botResponse: botResponse,
+      });
+      return;
+
+    } 
+    
+
+    if (queries2.some(query => query.name === 'syl')) {
+
+      let botResponse = "";
+      matchedItems2.forEach((item) => {
+        botResponse += `\n\n${item.name} is available in Sylhet ${item.syl} .`;
+  
+      });
+  
+      res.json({
+        botResponse: botResponse,
+      });
+      return;
+
+    } 
+    if (queries2.some(query => query.name === 'ctg')) {
+
+      let botResponse = "";
+      matchedItems2.forEach((item) => {
+        botResponse += `\n\n${item.name} is available in Chittagong ${item.ctg} .`;
+  
+      });
+  
+      res.json({
+        botResponse: botResponse,
+      });
+      return;
+
+    } 
+    
+    if (queries2.some(query => query.name === 'bb')) {
+
+      let botResponse = "";
+      matchedItems2.forEach((item) => {
+        botResponse += `\n\n${item.name} is available in Bangla Bazar ${item.ctg} .`;
+  
+      });
+  
+      res.json({
+        botResponse: botResponse,
+      });
+      return;
+
+    } 
+
+    if (queries2.some(query => query.name === 'ecom')) {
+
+      let botResponse = "";
+      matchedItems2.forEach((item) => {
+        botResponse += `\n\n${item.name} is available in Ecommerce ${item.ctg} .`;
+  
+      });
+  
+      res.json({
+        botResponse: botResponse,
+      });
+      return;
+
+    } 
+
+
+
+
+
+
+    // const matches = stringSimilarity.findBestMatch(
+    //   message,
+    //   dataArray.map((d) => d.name)
+    // );
+    // let matchedItems = [];
+    // if (matches.bestMatch.rating > 0.3) {
+    //   const matchedItem = dataArray[matches.bestMatchIndex];
+    //   matchedItems.push(matchedItem);
+    // } else {
+    //   console.log("No match found");
+    // }
+    // // console.log("matched item:", matchedItems[0]);
+    // const itemName = matchedItems[0];
+    // // console.log("ok version", itemName);
+
+
+
+
+
+
+
+
+    // if (!itemName) {
+    //   try {
+    //     const API_KEY = process.env.OPENAI_API_KEY;
+    //     const response = await axios({
+    //       method: "post",
+    //       url: "https://api.openai.com/v1/engines/text-davinci-003/completions",
+    //       headers: {
+    //         "Content-Type": "application/json",
+    //         Authorization: `Bearer ${API_KEY}`,
+    //       },
+    //       data: {
+    //         prompt: message,
+    //         max_tokens: 100,
+    //         n: 1,
+    //         stop: "",
+    //         temperature: 0.5,
+    //       },
+    //     });
+
+    //     return res.json({ botResponse: "\n" + response.data.choices[0].text });
+    //   } catch (error) {
+    //     return res
+    //       .status(500)
+    //       .send({ error: "Could not generate text completion" });
+    //   }
+    // }
+
+    // const queries = properties.filter((p) => message.includes(p.name));
+
+
+
+
+    // console.log("matching queries", queries);
+
+    // const replacements = {
+    //   dhk: "Dhaka",
+    //   syl: "Sylhet",
+    //   bb: "Bangla Bazar",
+    //   aziz: "Aziz Super Market",
+    //   ecom: "Ecommerce",
+    //   ctg: "Chittagong",
+    // };
+
+    // const result = queries
+    //   .map((q) => {
+    //     const data = dataArray.find((d) => d.name === itemName.name);
+    //     if (!data || !data[q.property]) {
+    //       return null;
+    //     }
+
+    //     return { [q.name]: data[q.property] };
+    //   })
+    //   .filter((r) => r !== null);
+    // if (result.length === 0) {
+    //   return res.status(400).json({ error: "No matching data found" });
+    // }
+
+    // const response = result.reduce((prev, curr) => {
+    //   return prev + ` ${Object.keys(curr)[0]}: ${curr[Object.keys(curr)[0]]} `;
+    // }, "");
+
+
+
+
+    // let modifiedResponse = response;
+    // for (const [key, value] of Object.entries(replacements)) {
+    //   modifiedResponse = modifiedResponse.replace(key, value);
+    // }
+    // let responseText = modifiedResponse.replace(/:/g, "").replace(/(\d)\s/g, "$1.");
+
+    // if (responseText.includes("price")) {
+    //   // If response contains a price, don't display "is available"
+    //   return res.json({
+    //     botResponse: `\n\n${itemName.name}${responseText.replace("price", "Price")}`,
+    //   });
+    // } 
+    
+    // else {
+    //   // If response doesn't contain a price, display "is available"
+    //   return res.json({
+    //     botResponse: `\n\n${itemName.name} is available in ${responseText}`,
+    //   });
+    // }
     
 
 
